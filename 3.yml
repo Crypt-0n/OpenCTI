@@ -1,0 +1,178 @@
+version: '3'
+
+services:
+
+  connector-export-file-stix:
+    image: opencti/connector-export-file-stix:3.1.0
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_EXPORT_FILE_STIX_ID}
+      - CONNECTOR_TYPE=INTERNAL_EXPORT_FILE
+      - CONNECTOR_NAME=ExportFileStix2
+      - CONNECTOR_SCOPE=application/json
+      - CONNECTOR_CONFIDENCE_LEVEL=3
+      - CONNECTOR_LOG_LEVEL=info
+
+  connector-export-file-csv:
+    image: opencti/connector-export-file-csv:3.1.0
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_EXPORT_FILE_CSV_ID}
+      - CONNECTOR_TYPE=INTERNAL_EXPORT_FILE
+      - CONNECTOR_NAME=ExportFileCsv
+      - CONNECTOR_SCOPE=application/csv
+      - CONNECTOR_CONFIDENCE_LEVEL=3
+      - CONNECTOR_LOG_LEVEL=info
+
+  connector-import-file-stix:
+    image: opencti/connector-import-file-stix:3.1.0
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_IMPORT_FILE_STIX_ID}dcbfc18d-e497-41e6-86c0-16c87b15c482
+      - CONNECTOR_TYPE=INTERNAL_IMPORT_FILE
+      - CONNECTOR_NAME=ImportFileStix2
+      - CONNECTOR_SCOPE=application/json
+      - CONNECTOR_CONFIDENCE_LEVEL=3
+      - CONNECTOR_LOG_LEVEL=info
+
+  connector-import-file-pdf-observables:
+    image: opencti/connector-import-file-pdf-observables:3.1.0
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_IMPORT_FILE_PDF_OBSERVABLES_ID}
+      - CONNECTOR_TYPE=INTERNAL_IMPORT_FILE
+      - CONNECTOR_NAME=ImportFilePdfObservables
+      - CONNECTOR_SCOPE=application/pdf
+      - CONNECTOR_CONFIDENCE_LEVEL=3
+      - CONNECTOR_LOG_LEVEL=info
+      - PDF_OBSERVABLES_CREATE_INDICATOR=False
+
+  connector-opencti:
+    image: opencti/connector-opencti:3.1.0
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_OPENCTI_ID}
+      - CONNECTOR_TYPE=EXTERNAL_IMPORT
+      - CONNECTOR_NAME=OpenCTI
+      - CONNECTOR_SCOPE=identity,sector,region,country,city
+      - CONNECTOR_CONFIDENCE_LEVEL=5
+      - CONNECTOR_UPDATE_EXISTING_DATA=true
+      - CONNECTOR_LOG_LEVEL=info
+      - CONFIG_SECTORS_FILE_URL=https://raw.githubusercontent.com/OpenCTI-Platform/datasets/master/data/sectors.json
+      - CONFIG_GEOGRAPHY_FILE_URL=https://raw.githubusercontent.com/OpenCTI-Platform/datasets/master/data/geography.json
+      - CONFIG_INTERVAL=7 # Days
+
+  connector-mitre:
+    image: opencti/connector-mitre:3.1.0
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_MITRE_ID}
+      - CONNECTOR_TYPE=EXTERNAL_IMPORT
+      - CONNECTOR_NAME=MITRE ATT&CK
+      - CONNECTOR_SCOPE=identity,attack-pattern,course-of-action,intrusion-set,malware,tool,report
+      - CONNECTOR_CONFIDENCE_LEVEL=3
+      - CONNECTOR_UPDATE_EXISTING_DATA=true
+      - CONNECTOR_LOG_LEVEL=info
+      - MITRE_ENTERPRISE_FILE_URL=https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json
+      - MITRE_PRE_ATTACK_FILE_URL=https://raw.githubusercontent.com/mitre/cti/master/pre-attack/pre-attack.json
+      - MITRE_INTERVAL=7 # Days
+
+  connector-cve:
+    image: opencti/connector-cve:3.1.0
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_CVE_ID}
+      - CONNECTOR_TYPE=EXTERNAL_IMPORT
+      - CONNECTOR_NAME=Common Vulnerabilities and Exposures
+      - CONNECTOR_SCOPE=identity,vulnerability
+      - CONNECTOR_CONFIDENCE_LEVEL=3
+      - CONNECTOR_UPDATE_EXISTING_DATA=true
+      - CONNECTOR_LOG_LEVEL=info
+      - CVE_NVD_DATA_FEED=https://nvd.nist.gov/feeds/json/cve/1.0/nvdcve-1.0-recent.json.gz
+      - CVE_INTERVAL=7 # Days
+
+  connector-ipinfo:
+    image: opencti/connector-ipinfo:3.1.0
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_IPINFO_ID}53821203-e233-4d22-ab09-e586663a664e
+      - CONNECTOR_TYPE=INTERNAL_ENRICHMENT
+      - CONNECTOR_NAME=IpInfo
+      - CONNECTOR_SCOPE=ipv4-addr
+      - CONNECTOR_CONFIDENCE_LEVEL=3
+      - CONNECTOR_LOG_LEVEL=info
+      - IPINFO_TOKEN=${IPINFO_TOKEN}
+      - IPINFO_MAX_TLP=TLP:AMBER
+
+  connector-alienvault:
+    image: opencti/connector-alienvault:3.1.0
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_ALIENVAULT_ID}
+      - CONNECTOR_TYPE=EXTERNAL_IMPORT
+      - CONNECTOR_NAME=AlienVault
+      - CONNECTOR_SCOPE=alienvault
+      - CONNECTOR_CONFIDENCE_LEVEL=3
+      - CONNECTOR_UPDATE_EXISTING_DATA=false
+      - CONNECTOR_LOG_LEVEL=info
+      - ALIENVAULT_BASE_URL=https://otx.alienvault.com
+      - ALIENVAULT_API_KEY=${ALIENVAULT_API_KEY}
+      - ALIENVAULT_TLP=White
+      - ALIENVAULT_PULSE_START_TIMESTAMP=2020-01-01T00:00:00  # BEWARE! Could be a lot of pulses!
+      - ALIENVAULT_REPORT_TYPE=Threat Report
+      - ALIENVAULT_REPORT_STATUS=Analyzed
+      - ALIENVAULT_INTERVAL_SEC=1800
+
+  connector-amitt:
+    image: opencti/connector-amitt:3.1.0
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_AMITT_ID}
+      - CONNECTOR_TYPE=EXTERNAL_IMPORT
+      - CONNECTOR_NAME=AM!TT
+      - CONNECTOR_SCOPE=identity,attack-pattern,course-of-action,intrusion-set,malware,tool,report
+      - CONNECTOR_CONFIDENCE_LEVEL=3
+      - CONNECTOR_UPDATE_EXISTING_DATA=true
+      - CONNECTOR_LOG_LEVEL=info
+      - AMITT_FILE_URL=https://raw.githubusercontent.com/VVX7/cti/master/amitt-attack/amitt-attack.json
+      - PRE_AMITT_FILE_URL=https://raw.githubusercontent.com/VVX7/cti/master/amitt-pre-attack/amitt-pre-attack.json
+      - AMITT_INTERVAL=7 # Days
+
+  connector-cyber-threat-coalition:
+    image: opencti/connector-cyber-threat-coalition:3.1.0
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_CTC_ID}
+      - CONNECTOR_TYPE=EXTERNAL_IMPORT
+      - CONNECTOR_NAME=CyberThreatCoalition
+      - CONNECTOR_SCOPE=indicator,report,identity
+      - CONNECTOR_CONFIDENCE_LEVEL=3
+      - CONNECTOR_UPDATE_EXISTING_DATA=false
+      - CONNECTOR_LOG_LEVEL=info
+      - CYBER_THREAT_COALITION_INTERVAL=21600 # Seconds (6 hours)
+      - CYBER_THREAT_COALITION_BASE_URL=https://blacklist.cyberthreatcoalition.org/vetted
+
+  connector-cryptolaemus:
+    image: opencti/connector-cryptolaemus:3.1.0
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_CRYPTOLAEMUS_ID}
+      - CONNECTOR_TYPE=EXTERNAL_IMPORT
+      - CONNECTOR_NAME=Cryptolaemus
+      - CONNECTOR_SCOPE=cryptolaemus
+      - CONNECTOR_CONFIDENCE_LEVEL=3
+      - CONNECTOR_UPDATE_EXISTING_DATA=true
+      - CONNECTOR_LOG_LEVEL=info
+
