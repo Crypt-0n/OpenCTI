@@ -51,7 +51,7 @@ docker-compose -f 3.yml up -d
 ## Stop
 
 ```bash
-sudo docker-compose -f 1.yml down
-sudo docker-compose -f 2.yml down
-sudo docker-compose -f 3.yml down
+docker-compose -f 1.yml down
+docker-compose -f 2.yml down
+docker-compose -f 3.yml down
 ```
