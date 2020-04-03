@@ -29,23 +29,23 @@ $ vm.max_map_count=1048575
 
 ### Starting grakn, redis, elasticsearch, minio and rabbitmq
 
-Execute :
+Execute (root user) :
 ```bash
-sudo docker-compose -f 1.yml up -d
+docker-compose -f 1.yml up -d
 ```
 
 ### Starting OpenCTI and worker
 
-Waiting 1 minute and execute :
+Waiting 1 minute and execute (root user) :
 ```bash
-sudo docker-compose -f 3.yml up -d
+docker-compose -f 3.yml up -d
 ```
 
 ### Starting connectors
 
-Waiting 1 minute and execute :
+Waiting 1 minute and execute (root user) :
 ```bash
-sudo docker-compose -f 3.yml up -d
+docker-compose -f 3.yml up -d
 ```
 
 ## Stop
